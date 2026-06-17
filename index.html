@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Song Chen | Senior System Engineer & AI Agent Architect</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            inter: ['Inter', 'sans-serif'],
+            noto: ['Noto Sans SC', 'sans-serif'],
+            poppins: ['Poppins', 'sans-serif'],
+          },
+          colors: {
+            primary: '#00f5ff',
+            secondary: '#bf00ff',
+            dark: '#0a0a0a',
+            aurora1: '#00f5ff',
+            aurora2: '#bf00ff',
+            aurora3: '#00ff88',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', 'Noto Sans SC', 'Poppins', sans-serif;
+      background-color: #0a0a0a;
+      color: #ffffff;
+      overflow-x: hidden;
+      font-size: 1.125rem;
+      line-height: 1.75;
+    }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #0a0a0a; }
+    ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #00f5ff, #bf00ff); border-radius: 4px; }
+
+    /* Aurora background */
+    .aurora-bg {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .aurora-bg::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%; width: 200%; height: 200%;
+      background:
+        radial-gradient(ellipse at 20% 20%, rgba(0, 245, 255, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 30%, rgba(191, 0, 255, 0.06) 0%, transparent 45%),
+        radial-gradient(ellipse at 40% 70%, rgba(0, 255, 136, 0.04) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 80%, rgba(0, 245, 255, 0.05) 0%, transparent 40%);
+      animation: auroraMove 20s ease-in-out infinite;
+    }
+    @keyframes auroraMove {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      33% { transform: translate(2%, 1%) rotate(1deg); }
+      66% { transform: translate(-1%, 2%) rotate(-1deg); }
+    }
+
+    .glow-cyan { box-shadow: 0 0 25px rgba(0, 245, 255, 0.5); }
+    .glass { background: rgba(10, 14, 23, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(0, 245, 255, 0.12); }
+    .gradient-text { background: linear-gradient(135deg, #00f5ff, #bf00ff, #00ff88); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+    .btn-primary { background: linear-gradient(135deg, #00f5ff, #bf00ff); box-shadow: 0 0 25px rgba(0, 245, 255, 0.4); transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
+    .btn-primary:hover { transform: scale(1.05) translateY(-3px); box-shadow: 0 0 40px rgba(0, 245, 255, 0.6), 0 10px 30px rgba(0, 0, 0, 0.3); }
+    .btn-primary:active { transform: scale(0.98); }
+    .btn-secondary { border: 2px solid #00f5ff; color: #00f5ff; transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
+    .btn-secondary:hover { background: rgba(0, 245, 255, 0.12); box-shadow: 0 0 30px rgba(0, 245, 255, 0.4); transform: translateY(-3px); }
+
+    .card-hover { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
+    .card-hover:hover { transform: translateY(-12px) scale(1.02); box-shadow: 0 25px 60px rgba(0, 245, 255, 0.2), 0 0 40px rgba(0, 245, 255, 0.15); border-color: rgba(0, 245, 255, 0.4); }
+
+    .skill-bar { height: 10px; background: rgba(255, 255, 255, 0.06); border-radius: 5px; overflow: hidden; }
+    .skill-progress { height: 100%; background: linear-gradient(90deg, #00f5ff, #bf00ff, #00ff88); border-radius: 5px; transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1); }
+
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
+    .fade-in-up { opacity: 0; animation: fadeInUp 0.9s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+    @keyframes fadeInLeft { from { opacity: 0; transform: translateX(-50px); } to { opacity: 1; transform: translateX(0); } }
+    .fade-in-left { opacity: 0; animation: fadeInLeft 0.9s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+    @keyframes fadeInRight { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: translateX(0); } }
+    .fade-in-right { opacity: 0; animation: fadeInRight 0.9s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+
+    @keyframes gridMove { 0% { transform: translate(0, 0); } 100% { transform: translate(50px, 50px); } }
+    .hero-grid { background-image: linear-gradient(rgba(0, 245, 255, 0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 245, 255, 0.015) 1px, transparent 1px); background-size: 60px 60px; animation: gridMove 40s linear infinite; }
+
+    @keyframes float { 0%, 100% { transform: translateY(0) scale(1); opacity: 0.4; } 50% { transform: translateY(-30px) scale(1.2); opacity: 0.8; } }
+    .particle { animation: float 6s ease-in-out infinite; }
+
+    .nav-link { position: relative; color: #9ca3af; transition: color 0.3s ease; }
+    .nav-link::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: linear-gradient(90deg, #00f5ff, #bf00ff); transition: width 0.3s ease; }
+    .nav-link:hover { color: #00f5ff; }
+    .nav-link:hover::after { width: 100%; }
+
+    .lang-dropdown { position: relative; }
+    .lang-menu { position: absolute; right: 0; top: 100%; margin-top: 8px; min-width: 130px; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.3s ease; }
+    .lang-dropdown:hover .lang-menu, .lang-menu:hover { opacity: 1; visibility: visible; transform: translateY(0); }
+
+    @keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .animate-spin-slow { animation: spin-slow 12s linear infinite; }
+    @keyframes pulse-glow { 0%, 100% { box-shadow: 0 0 25px rgba(0, 245, 255, 0.3), 0 0 50px rgba(0, 245, 255, 0.1); } 50% { box-shadow: 0 0 40px rgba(0, 245, 255, 0.5), 0 0 80px rgba(0, 245, 255, 0.2); } }
+    .pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
+    @keyframes badge-pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.8; transform: scale(0.98); } }
+    .badge-pulse { animation: badge-pulse 2.5s ease-in-out infinite; }
+
+    .parallax-layer { transition: transform 0.1s linear; }
+    .reveal { opacity: 0; transform: translateY(40px); transition: all 0.9s cubic-bezier(0.4, 0, 0.2, 1); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
+    .modal-overlay.active { opacity: 1; visibility: visible; }
+    .modal-content { background: rgba(10, 14, 23, 0.95); border: 1px solid rgba(0, 245, 255, 0.3); border-radius: 20px; padding: 40px; max-width: 350px; text-align: center; transform: scale(0.9); transition: transform 0.3s ease; }
+    .modal-overlay.active .modal-content { transform: scale(1); }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- WeChat QR Modal -->
+  <div id="qrModal" class="modal-overlay" onclick="closeQrModal(event)">
+    <div class="modal-content">
+      <button onclick="closeQrModal()" class="absolute top-4 right-4 text-gray-400 hover:text-primary transition-colors">
+        <i class="fas fa-times text-xl"></i>
+      </button>
+      <div class="text-4xl mb-4">👋</div>
+      <h3 class="text-2xl font-bold mb-3 gradient-text">WeChat</h3>
+      <div class="w-48 h-48 mx-auto mb-4 bg-white rounded-xl overflow-hidden flex items-center justify-center">
+        <img src="https://minimax-algeng-chat-tts.oss-cn-wulanchabu.aliyuncs.com/ccv2%2F2026-06-12%2FMiniMax-M2.7%2F2048048677351591999%2F1c92c64ed2b2293efd605cc10e2b05a5474f3631d9abef0c4d99d276270e00a0..jpeg?Expires=1781354619&OSSAccessKeyId=LTAI5tGLnRTkBjLuYPjNcKQ8&Signature=uH6Nae%2BSAnVUGLPLdMUgbE0E8rQ%3D" alt="WeChat QR" class="w-full h-full object-contain" />
+      </div>
+      <p class="text-gray-400 text-sm">Scan to add me on WeChat</p>
+      <p class="text-gray-500 text-xs mt-2">ID: songchen_dev</p>
+    </div>
+  </div>
+
+  <script>
+    window.__PORTFOLIO_I18N__ = {
+      translations: {
+        'zh-CN': {
+          nav: { home: '首页', about: '关于', skills: '技能', projects: '项目', contact: '联系' },
+          hero: {
+            name: '宋晨', title: 'Senior System Engineer & AI Agent Architect', subtitle: 'M.Eng. in Software Engineering',
+            intro: '5年+全栈开发经验 | 跨国技术合作 | 专注于AI大模型落地与复杂系统架构，用代码创造价值',
+            badge: 'Open for Global Collaboration', downloadResume: '下载简历', contactMe: '联系我'
+          },
+          about: {
+            title: '关于我', education: '教育背景', bachelor: '北京交通大学 (211) - 信息安全学士', master: '卡尔顿大学 (加拿大) - 软件工程硕士 M.Eng',
+            bio: '我是一名追求极致工程美学的开发者。在5年的职业生涯中，我不仅专注于代码的实现，更致力于理解业务背后的逻辑。我相信优秀的软件是技术与产品的完美融合。',
+            vision: '愿景与使命', visionText: '我的愿景是利用智能化Agent工作流重塑软件开发范式。通过深度融合AI大模型与实际应用场景（教育、金融、科研），构建具有自我进化能力的系统，推动技术从"工具"向"伙伴"的转变。',
+            stats: { years: '年开发经验', projects: '完成项目', awards: '获得奖项', clients: '全球客户' }
+          },
+          skills: {
+            title: '专业技能',
+            core: '核心语言与底层', coreDesc: 'C/C++系统级开发 | Python数据处理',
+            web: 'Web全栈', webDesc: 'React/Node.js/Next.js + PostgreSQL',
+            data: '数据与AI', dataDesc: '知识图谱 | LLM集成 | 数据分析',
+            devops: 'DevOps工具', devopsDesc: 'Docker/K8s | AWS | CI/CD',
+            coreTags: ['C++', 'C', 'Python', 'Java', 'Go', 'Shell'], webTags: ['React', 'Node.js', 'Next.js', 'PostgreSQL', 'MongoDB'],
+            dataTags: ['PyTorch', 'Knowledge Graph', 'LLM Integration', 'Data Analysis'], devopsTags: ['Docker', 'Kubernetes', 'AWS', 'CI/CD', 'Linux']
+          },
+          projects: {
+            title: '项目展示', items: [
+              { name: '安全分布式车辆管理系统', subtitle: '高安全高可用分布式系统', description: '针对车联网场景下的高并发指令处理需求，设计并实现高安全、高可用的分布式管理系统。基于AES/RSA/SSL协议栈实现端到端数据加密，系统可用性达99.64%。', tags: ['Python', 'Microservices', 'Redis', 'AES/RSA/SSL'], highlight: '🔒 Security' },
+              { name: '智能语音识别与数据处理平台', subtitle: 'AI驱动的数据处理流水线', description: '负责多源音频数据的整合与核心算法优化，构建自动化数据处理流水线。通过特征提取与标准化处理，解决噪声干扰问题，模型识别准确率达92.3%。', tags: ['Python', 'Deep Learning', 'Signal Processing', 'PyTorch'], highlight: '🎤 AI/ML' },
+              { name: '响应式全栈电商平台', subtitle: '完整商业闭环电商解决方案', description: '独立搭建的全栈在线购物平台，从商品浏览、购物车到订单结算的完整商业闭环。基于MySQL设计高效关系型数据库模型，实现完善的用户认证与权限管理。', tags: ['JavaScript', 'PHP', 'MySQL', 'HTML/CSS'], highlight: '🛒 Full Stack' },
+              { name: '公式识别与算法质量保障系统', subtitle: '企业级OCR质量保障', description: '针对汉王科技核心OCR产品的公式识别模块，负责算法质量保障与系统集成。设计多维度测试验证方案，使系统整体可靠性提升20%，缩短算法迭代周期。', tags: ['Algorithm Testing', 'Parameter Tuning', 'Integration'], highlight: '📐 Algorithm' }
+            ]
+          },
+          contact: { title: '联系我', subtitle: '让我们一起创造非凡！欢迎探讨技术合作与AI教育创新', social: { email: '发送邮件', github: 'GitHub', linkedin: 'LinkedIn', wechat: '微信', xiaohongshu: '小红书', douyin: '抖音' } },
+          footer: { madeWith: '用心制作', copyright: '版权所有' }
+        },
+        'en-US': {
+          nav: { home: 'Home', about: 'About', skills: 'Skills', projects: 'Projects', contact: 'Contact' },
+          hero: { name: 'Song Chen', title: 'Senior System Engineer & AI Agent Architect', subtitle: 'M.Eng. in Software Engineering',
+            intro: '5+ Years Full Stack | Cross-border Tech Collaboration | AI LLM Implementation & Complex System Architecture',
+            badge: 'Open for Global Collaboration', downloadResume: 'Download Resume', contactMe: 'Contact Me'
+          },
+          about: {
+            title: 'About Me', education: 'Education', bachelor: 'BJTU (211) - B.Eng. Information Security', master: 'Carleton University (Canada) - M.Eng. Software Engineering',
+            bio: 'I am a developer who pursues extreme engineering aesthetics. In my 5-year career, I not only focus on code implementation but also on understanding the logic behind business.',
+            vision: 'Vision & Mission', visionText: 'My vision is to reshape software development paradigms through intelligent Agent workflows. By deeply integrating AI LLMs with practical scenarios, I build self-evolving systems.',
+            stats: { years: 'Years Experience', projects: 'Projects Completed', awards: 'Awards', clients: 'Global Clients' }
+          },
+          skills: {
+            title: 'Skills', core: 'Core Languages & Low-Level', coreDesc: 'C/C++ Systems | Python Data Processing',
+            web: 'Web Full Stack', webDesc: 'React/Node.js/Next.js + PostgreSQL',
+            data: 'Data & AI', dataDesc: 'Knowledge Graph | LLM Integration | Data Analysis',
+            devops: 'DevOps & Tools', devopsDesc: 'Docker/K8s | AWS | CI/CD',
+            coreTags: ['C++', 'C', 'Python', 'Java', 'Go', 'Shell'], webTags: ['React', 'Node.js', 'Next.js', 'PostgreSQL', 'MongoDB'],
+            dataTags: ['PyTorch', 'Knowledge Graph', 'LLM Integration', 'Data Analysis'], devopsTags: ['Docker', 'Kubernetes', 'AWS', 'CI/CD', 'Linux']
+          },
+          projects: {
+            title: 'Projects', items: [
+              { name: 'Secure Distributed Vehicle Management System', subtitle: 'High-Security Distributed System', description: 'Designed and implemented a highly secure and available distributed management system for IoV scenarios. End-to-end encryption via AES/RSA/SSL protocol stack, system availability reached 99.64%.', tags: ['Python', 'Microservices', 'Redis', 'AES/RSA/SSL'], highlight: '🔒 Security' },
+              { name: 'Intelligent Speech Recognition Platform', subtitle: 'AI-Powered Data Processing Pipeline', description: 'Responsible for multi-source audio data integration and core algorithm optimization. Solved noise interference problems through feature extraction, model recognition accuracy reached 92.3%.', tags: ['Python', 'Deep Learning', 'Signal Processing', 'PyTorch'], highlight: '🎤 AI/ML' },
+              { name: 'Responsive E-commerce Platform', subtitle: 'Complete Commercial Closed Loop', description: 'Independently built a full-stack online shopping platform with complete business loop from product browsing to order settlement. Designed efficient MySQL database model with complete user authentication.', tags: ['JavaScript', 'PHP', 'MySQL', 'HTML/CSS'], highlight: '🛒 Full Stack' },
+              { name: 'Formula Recognition & QA System', subtitle: 'Enterprise OCR Quality Assurance', description: 'Responsible for algorithm quality assurance and system integration of formula recognition module for Hanwang OCR product. Multi-dimensional test verification improved system reliability by 20%.', tags: ['Algorithm Testing', 'Parameter Tuning', 'Integration'], highlight: '📐 Algorithm' }
+            ]
+          },
+          contact: { title: 'Contact', subtitle: "Let's build something amazing together! Open for tech collaboration and AI education innovation.", social: { email: 'Email', github: 'GitHub', linkedin: 'LinkedIn', wechat: 'WeChat', xiaohongshu: 'Xiaohongshu', douyin: 'Douyin' } },
+          footer: { madeWith: 'Made with passion', copyright: 'All rights reserved' }
+        },
+        'ru-RU': {
+          nav: { home: 'Главная', about: 'Обо мне', skills: 'Навыки', projects: 'Проекты', contact: 'Контакты' },
+          hero: { name: 'Сун Чэнь', title: 'Senior System Engineer & AI Agent Architect', subtitle: 'M.Eng. in Software Engineering',
+            intro: '5+ лет Full Stack | Международное сотрудничество | AI LLM и сложные системы',
+            badge: 'Open for Global Collaboration', downloadResume: 'Скачать резюме', contactMe: 'Связаться'
+          },
+          about: {
+            title: 'Обо мне', education: 'Образование', bachelor: 'БЖТУ (211) - Бакалавр Информационной безопасности', master: 'Университет Карлтона (Канада) - M.Eng. Software Engineering',
+            bio: 'Я разработчик, стремящийся к инженерной эстетике. В моей 5-летней карьере я не только реализую код, но и понимаю бизнес-логику.',
+            vision: 'Видение и миссия', visionText: 'Мое видение - переосмыслить разработку ПО через интеллектуальные Agent-workflows. Стремлюсь к глубокой интеграции AI с образованием и наукой.',
+            stats: { years: 'Лет опыта', projects: 'Проектов', awards: 'Наград', clients: 'Глобальных клиентов' }
+          },
+          skills: {
+            title: 'Навыки', core: 'Основные языки и низкий уровень', coreDesc: 'C/C++ Системы | Python Обработка данных',
+            web: 'Web Full Stack', webDesc: 'React/Node.js/Next.js + PostgreSQL',
+            data: 'Данные и AI', dataDesc: 'Граф знаний | LLM Интеграция | Анализ данных',
+            devops: 'DevOps и инструменты', devopsDesc: 'Docker/K8s | AWS | CI/CD',
+            coreTags: ['C++', 'C', 'Python', 'Java', 'Go', 'Shell'], webTags: ['React', 'Node.js', 'Next.js', 'PostgreSQL', 'MongoDB'],
+            dataTags: ['PyTorch', 'Граф знаний', 'LLM Интеграция', 'Анализ данных'], devopsTags: ['Docker', 'Kubernetes', 'AWS', 'CI/CD', 'Linux']
+          },
+          projects: {
+            title: 'Проекты', items: [
+              { name: 'Безопасная распределённая система управления транспортом', subtitle: 'Высокобезопасная распределённая система', description: 'Спроектировал высокобезопасную и высокодоступную распределённую систему для IoV сценариев. Сквозное шифрование через AES/RSA/SSL, доступность 99.64%.', tags: ['Python', 'Microservices', 'Redis', 'AES/RSA/SSL'], highlight: '🔒 Security' },
+              { name: 'Интеллектуальная платформа распознавания речи', subtitle: 'AI-пайплайн обработки данных', description: 'Отвечал за интеграцию мульти-источников аудио и оптимизацию алгоритмов. Решил проблемы шумовых помех через экстракцию признаков, точность модели 92.3%.', tags: ['Python', 'Deep Learning', 'Signal Processing', 'PyTorch'], highlight: '🎤 AI/ML' },
+              { name: 'Адаптивная e-commerce платформа', subtitle: 'Полный коммерческий цикл', description: 'Самостоятельно построил full-stack платформу с полным циклом от просмотра до заказа. Спроектировал MySQL модель с аутентификацией и правами доступа.', tags: ['JavaScript', 'PHP', 'MySQL', 'HTML/CSS'], highlight: '🛒 Full Stack' },
+              { name: 'Система распознавания формул и обеспечения качества', subtitle: 'Корпоративное OCR QA', description: 'Отвечал за QA и интеграцию модуля распознавания формул для OCR Hanwang. Многомерная верификация повысила надёжность на 20%.', tags: ['Algorithm Testing', 'Parameter Tuning', 'Integration'], highlight: '📐 Algorithm' }
+            ]
+          },
+          contact: { title: 'Контакты', subtitle: 'Давайте создавать удивительные вещи! Открыт для технологического сотрудничества.', social: { email: 'Email', github: 'GitHub', linkedin: 'LinkedIn', wechat: 'WeChat', xiaohongshu: 'Сяохуншу', douyin: 'Доуинь' } },
+          footer: { madeWith: 'Сделано с страстью', copyright: 'Все права защищены' }
+        }
+      },
+      languages: [
+        { code: 'zh-CN', label: '中文', flag: '🇨🇳' },
+        { code: 'en-US', label: 'EN', flag: '🇺🇸' },
+        { code: 'ru-RU', label: 'Русский', flag: '🇷🇺' }
+      ]
+    };
+
+    function openQrModal() { document.getElementById('qrModal').classList.add('active'); }
+    function closeQrModal(e) { if (e && e.target !== e.currentTarget) return; document.getElementById('qrModal').classList.remove('active'); }
+  </script>
+
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+const { useState, useEffect, useRef, createContext, useContext } = React;
+
+const I18nContext = createContext();
+const useI18n = () => useContext(I18nContext);
+
+const I18nProvider = ({ children }) => {
+  const [lang, setLang] = useState(() => localStorage.getItem('portfolio-lang') || 'zh-CN');
+  useEffect(() => { localStorage.setItem('portfolio-lang', lang); }, [lang]);
+  return <I18nContext.Provider value={{ lang, setLang }}>{children}</I18nContext.Provider>;
+};
+
+const CursorGlow = () => {
+  const canvasRef = useRef(null);
+  const mouseRef = useRef({ x: 0, y: 0 });
+  const glowRef = useRef({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
+    resize();
+    window.addEventListener('resize', resize);
+    let animationId;
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      glowRef.current.x += (mouseRef.current.x - glowRef.current.x) * 0.06;
+      glowRef.current.y += (mouseRef.current.y - glowRef.current.y) * 0.06;
+      const gradient = ctx.createRadialGradient(glowRef.current.x, glowRef.current.y, 0, glowRef.current.x, glowRef.current.y, 350);
+      gradient.addColorStop(0, 'rgba(0, 245, 255, 0.1)');
+      gradient.addColorStop(0.4, 'rgba(191, 0, 255, 0.04)');
+      gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      animationId = requestAnimationFrame(animate);
+    };
+    animate();
+    const handleMouseMove = (e) => { mouseRef.current.x = e.clientX; mouseRef.current.y = e.clientY; };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => { window.removeEventListener('resize', resize); window.removeEventListener('mousemove', handleMouseMove); cancelAnimationFrame(animationId); };
+  }, []);
+  return <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-[1]" style={{ mixBlendMode: 'screen' }} />;
+};
+
+const LanguageSwitcher = () => {
+  const { lang, setLang } = useI18n();
+  const [isOpen, setIsOpen] = useState(false);
+  const languages = window.__PORTFOLIO_I18N__.languages;
+  const currentLang = languages.find(l => l.code === lang) || languages[0];
+  return (
+    <div className="relative">
+      <button onClick={() => setIsOpen(!isOpen)} className="flex items-center gap-2 px-4 py-2.5 rounded-lg glass text-sm font-medium hover:bg-white/10 transition-all">
+        <span>{currentLang.flag}</span><span>{currentLang.label}</span>
+        <i className={`fas fa-chevron-down text-xs transition-transform ${isOpen ? 'rotate-180' : ''}`}></i>
+      </button>
+      {isOpen && (
+        <div className="absolute right-0 mt-3 py-2 rounded-xl glass min-w-[140px] z-50">
+          {languages.map(l => (
+            <button key={l.code} onClick={() => { setLang(l.code); setIsOpen(false); }}
+              className={`w-full px-4 py-2.5 text-left text-sm hover:bg-white/10 transition-all flex items-center gap-2 ${lang === l.code ? 'text-primary' : 'text-gray-300'}`}>
+              <span>{l.flag}</span><span>{l.label}</span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+const Navbar = ({ t }) => {
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  useEffect(() => { const handleScroll = () => setScrolled(window.scrollY > 60); window.addEventListener('scroll', handleScroll); return () => window.removeEventListener('scroll', handleScroll); }, []);
+  const navLinks = [{ href: '#home', label: t.nav.home }, { href: '#about', label: t.nav.about }, { href: '#skills', label: t.nav.skills }, { href: '#projects', label: t.nav.projects }, { href: '#contact', label: t.nav.contact }];
+  return (
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'glass border-b border-cyan-500/15' : 'bg-transparent'}`}>
+      <div className="max-w-7xl mx-auto px-10 h-[85px] flex items-center justify-between">
+        <a href="#home" className="text-2xl font-bold gradient-text tracking-tight">SC.Portfolio</a>
+        <div className="hidden md:flex items-center gap-10">
+          {navLinks.map(link => (<a key={link.href} href={link.href} className="nav-link text-base font-medium">{link.label}</a>))}
+          <LanguageSwitcher />
+        </div>
+        <button className="md:hidden text-gray-300 hover:text-primary" onClick={() => setMobileOpen(!mobileOpen)}>
+          <i className={`fas ${mobileOpen ? 'fa-times' : 'fa-bars'} text-2xl`}></i>
+        </button>
+      </div>
+      {mobileOpen && (
+        <div className="md:hidden glass border-t border-cyan-500/15">
+          <div className="px-10 py-6 flex flex-col gap-5">
+            {navLinks.map(link => (<a key={link.href} href={link.href} className="nav-link text-lg font-medium" onClick={() => setMobileOpen(false)}>{link.label}</a>))}
+            <div className="pt-5 border-t border-white/10"><LanguageSwitcher /></div>
+          </div>
+        </div>
+      )}
+    </nav>
+  );
+};
+
+const Header = ({ t }) => (
+  <section id="home" className="min-h-screen relative flex items-center justify-center overflow-hidden">
+    <div className="absolute inset-0 hero-grid opacity-25"></div>
+    <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-primary/6 rounded-full blur-[180px]"></div>
+    <div className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-secondary/6 rounded-full blur-[180px]"></div>
+    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-aurora3/3 rounded-full blur-[200px]"></div>
+    {[...Array(8)].map((_, i) => (
+      <div key={i} className="particle absolute w-2.5 h-2.5 rounded-full opacity-25"
+        style={{ left: `${8 + i * 11}%`, top: `${12 + (i % 4) * 22}%`, animationDelay: `${i * 0.5}s`, animationDuration: `${5 + i * 0.6}s`, background: i % 3 === 0 ? '#00f5ff' : i % 3 === 1 ? '#bf00ff' : '#00ff88' }} />
+    ))}
+    <div className="relative z-10 text-center px-10 max-w-5xl mx-auto">
+      <div className="fade-in-up badge-pulse inline-flex items-center gap-3 px-6 py-3 rounded-full glass border border-primary/30 mb-10" style={{ animationDelay: '0.1s' }}>
+        <span className="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse"></span>
+        <span className="text-sm font-semibold text-primary tracking-wide">{t.hero.badge}</span>
+      </div>
+      <h1 className="text-6xl md:text-8xl font-bold mb-6 fade-in-up" style={{ animationDelay: '0.3s' }}>{t.hero.name}</h1>
+      <div className="fade-in-up flex flex-col sm:flex-row items-center justify-center gap-4 mb-6" style={{ animationDelay: '0.5s' }}>
+        <h2 className="text-2xl md:text-4xl font-light text-primary">{t.hero.title}</h2>
+        <span className="hidden sm:block w-1.5 h-10 bg-gradient-to-b from-primary/60 to-secondary/60 rounded-full"></span>
+        <h2 className="text-xl md:text-2xl font-light text-gray-400">{t.hero.subtitle}</h2>
+      </div>
+      <p className="text-gray-400 text-lg md:text-xl max-w-3xl mx-auto mb-14 leading-relaxed fade-in-up" style={{ animationDelay: '0.7s' }}>{t.hero.intro}</p>
+      <div className="flex flex-col sm:flex-row gap-6 justify-center fade-in-up" style={{ animationDelay: '0.9s' }}>
+        <a href="#contact" className="btn-primary px-12 py-4 rounded-full font-semibold text-black text-lg tracking-wide"><i className="fas fa-download mr-3"></i>{t.hero.downloadResume}</a>
+        <a href="#contact" className="btn-secondary px-12 py-4 rounded-full font-semibold text-lg tracking-wide"><i className="fas fa-paper-plane mr-3"></i>{t.hero.contactMe}</a>
+      </div>
+      <div className="flex justify-center gap-8 mt-20 fade-in-up" style={{ animationDelay: '1.1s' }}>
+        <a href="https://github.com/chensong823" target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full border border-gray-700/50 flex items-center justify-center text-gray-400 hover:text-primary hover:border-primary hover:glow-cyan transition-all text-xl"><i className="fab fa-github"></i></a>
+        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full border border-gray-700/50 flex items-center justify-center text-gray-400 hover:text-primary hover:border-primary hover:glow-cyan transition-all text-xl"><i className="fab fa-linkedin-in"></i></a>
+        <a href="mailto:chensong823@gmail.com" className="w-14 h-14 rounded-full border border-gray-700/50 flex items-center justify-center text-gray-400 hover:text-primary hover:border-primary hover:glow-cyan transition-all text-xl"><i className="fas fa-envelope"></i></a>
+      </div>
+    </div>
+    <div className="absolute bottom-12 left-1/2 -translate-x-1/2 animate-bounce">
+      <a href="#about" className="text-primary/40 hover:text-primary/70 transition-colors"><i className="fas fa-chevron-down text-3xl"></i></a>
+    </div>
+  </section>
+);
+
+const About = ({ t }) => {
+  const ref = useRef(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => { const observer = new IntersectionObserver(([e]) => e.isIntersecting && setVisible(true), { threshold: 0.12 }); if (ref.current) observer.observe(ref.current); return () => observer.disconnect(); }, []);
+  return (
+    <section id="about" ref={ref} className="py-36 px-10 relative parallax-layer">
+      <div className="max-w-6xl mx-auto">
+        <div className="text-center mb-24 reveal"><h2 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight">{t.about.title}</h2><div className="w-28 h-1.5 bg-gradient-to-r from-primary via-secondary to-aurora3 mx-auto rounded-full"></div></div>
+        <div className={`grid lg:grid-cols-2 gap-20 items-center transition-all duration-1000 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
+          <div className="flex justify-center fade-in-left">
+            <div className="relative">
+              <div className="w-80 h-80 rounded-full bg-gradient-to-br from-primary via-secondary to-aurora3 p-1 animate-spin-slow pulse-glow">
+                <div className="w-full h-full rounded-full bg-dark flex items-center justify-center"><span className="text-8xl">👨‍💻</span></div>
+              </div>
+              <div className="absolute -inset-8 border-2 border-primary/15 rounded-full"></div>
+              <div className="absolute -inset-14 border border-primary/8 rounded-full"></div>
+            </div>
+          </div>
+          <div className="space-y-8 fade-in-right">
+            <div className="glass rounded-3xl p-8">
+              <h3 className="text-lg font-bold text-primary mb-6 flex items-center gap-3"><i className="fas fa-graduation-cap text-xl"></i>{t.about.education}</h3>
+              <div className="space-y-5">
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center"><i className="fas fa-university text-primary text-xl"></i></div>
+                  <div><div className="font-semibold text-lg">{t.about.bachelor}</div></div>
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center"><i className="fas fa-award text-secondary text-xl"></i></div>
+                  <div><div className="font-semibold text-lg">{t.about.master}</div></div>
+                </div>
+              </div>
+            </div>
+            <p className="text-gray-300 text-lg leading-relaxed">{t.about.bio}</p>
+            <div className="glass rounded-3xl p-8 border-l-4 border-l-primary">
+              <h3 className="text-lg font-bold text-primary mb-4 flex items-center gap-3"><i className="fas fa-lightbulb text-xl"></i>{t.about.vision}</h3>
+              <p className="text-gray-300 italic leading-relaxed text-lg">{t.about.visionText}</p>
+            </div>
+            <div className="flex flex-wrap justify-start gap-12 pt-6">
+              <div className="text-center"><div className="text-5xl font-bold gradient-text">5+</div><div className="text-gray-500 mt-2">{t.about.stats.years}</div></div>
+              <div className="text-center"><div className="text-5xl font-bold gradient-text">30+</div><div className="text-gray-500 mt-2">{t.about.stats.projects}</div></div>
+              <div className="text-center"><div className="text-5xl font-bold gradient-text">10+</div><div className="text-gray-500 mt-2">{t.about.stats.awards}</div></div>
+              <div className="text-center"><div className="text-5xl font-bold gradient-text">50+</div><div className="text-gray-500 mt-2">{t.about.stats.clients}</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const Skills = ({ t }) => {
+  const ref = useRef(null);
+  const [visible, setVisible] = useState(false);
+  const [skills, setSkills] = useState({ core: 0, web: 0, data: 0, devops: 0 });
+  useEffect(() => { const observer = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setVisible(true); setSkills({ core: 95, web: 88, data: 82, devops: 78 }); } }, { threshold: 0.12 }); if (ref.current) observer.observe(ref.current); return () => observer.disconnect(); }, []);
+  const categories = [
+    { key: 'core', icon: 'fa-solid fa-code', name: t.skills.core, desc: t.skills.coreDesc, tags: t.skills.coreTags, color: 'from-cyan-400 to-blue-500' },
+    { key: 'web', icon: 'fa-solid fa-layer-group', name: t.skills.web, desc: t.skills.webDesc, tags: t.skills.webTags, color: 'from-green-400 to-emerald-500' },
+    { key: 'data', icon: 'fa-solid fa-brain', name: t.skills.data, desc: t.skills.dataDesc, tags: t.skills.dataTags, color: 'from-purple-400 to-pink-500' },
+    { key: 'devops', icon: 'fa-solid fa-terminal', name: t.skills.devops, desc: t.skills.devopsDesc, tags: t.skills.devopsTags, color: 'from-orange-400 to-red-500' }
+  ];
+  return (
+    <section id="skills" ref={ref} className="py-36 px-10 bg-gradient-to-b from-dark/80 to-dark/40 parallax-layer">
+      <div className="max-w-6xl mx-auto">
+        <div className="text-center mb-24 reveal"><h2 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight">{t.skills.title}</h2><div className="w-28 h-1.5 bg-gradient-to-r from-primary via-secondary to-aurora3 mx-auto rounded-full"></div></div>
+        <div className="grid md:grid-cols-2 gap-10">
+          {categories.map((cat, i) => (
+            <div key={cat.key} className={`glass rounded-3xl p-10 card-hover transition-all duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: `${i * 150}ms` }}>
+              <div className="flex items-center gap-6 mb-8">
+                <div className={`w-[70px] h-[70px] rounded-2xl bg-gradient-to-br ${cat.color} flex items-center justify-center shadow-lg`}><i className={`${cat.icon} text-white text-2xl`}></i></div>
+                <div><h3 className="text-2xl font-bold">{cat.name}</h3><p className="text-gray-500 text-sm mt-1">{cat.desc}</p></div>
+              </div>
+              <div className="skill-bar mb-8"><div className="skill-progress" style={{ width: visible ? `${skills[cat.key]}%` : '0%' }}></div></div>
+              <div className="flex flex-wrap gap-3">
+                {cat.tags.map(tag => (<span key={tag} className="px-4 py-2.5 text-sm rounded-xl bg-white/5 border border-primary/15 text-gray-300 hover:text-primary hover:border-primary/40 transition-all cursor-default font-medium">{tag}</span>))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const Projects = ({ t }) => {
+  const projectIcons = ['fa-car', 'fa-microphone', 'fa-shopping-cart', 'fa-superscript'];
+  return (
+    <section id="projects" className="py-36 px-10 parallax-layer">
+      <div className="max-w-6xl mx-auto">
+        <div className="text-center mb-24 reveal"><h2 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight">{t.projects.title}</h2><div className="w-28 h-1.5 bg-gradient-to-r from-primary via-secondary to-aurora3 mx-auto rounded-full"></div></div>
+        <div className="grid md:grid-cols-2 gap-12">
+          {t.projects.items.map((project, i) => (
+            <div key={i} className="glass rounded-3xl overflow-hidden card-hover group reveal" style={{ transitionDelay: `${i * 120}ms` }}>
+              <div className="h-56 relative overflow-hidden bg-gradient-to-br from-dark to-gray-900/50">
+                <div className="absolute top-0 left-0 w-full h-full">
+                  <div className="absolute top-8 left-8 w-28 h-28 bg-primary/15 rounded-full blur-3xl"></div>
+                  <div className="absolute bottom-8 right-8 w-32 h-32 bg-secondary/15 rounded-full blur-3xl"></div>
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-aurora3/10 rounded-full blur-3xl"></div>
+                </div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-[100px] h-[100px] rounded-2xl bg-gradient-to-br from-primary/25 to-secondary/25 flex items-center justify-center backdrop-blur-sm border border-white/10 group-hover:scale-110 transition-transform duration-500">
+                    <i className={`fa-solid ${projectIcons[i]} text-4xl text-primary`}></i>
+                  </div>
+                </div>
+                <div className="absolute top-5 right-5 px-3 py-1.5 rounded-full bg-primary/20 border border-primary/30 text-xs text-primary font-semibold">{project.highlight}</div>
+              </div>
+              <div className="p-10">
+                <h3 className="text-2xl font-bold mb-2 group-hover:text-primary transition-colors duration-300">{project.name}</h3>
+                <p className="text-primary/70 text-sm mb-5">{project.subtitle}</p>
+                <p className="text-gray-400 mb-7 leading-relaxed">{project.description}</p>
+                <div className="flex flex-wrap gap-2 mb-7">
+                  {project.tags.map(tag => (<span key={tag} className="px-3 py-1.5 text-sm rounded-lg bg-primary/10 text-primary border border-primary/25 font-medium">{tag}</span>))}
+                </div>
+                <div className="flex gap-8">
+                  <a href="#" className="text-base text-gray-400 hover:text-primary transition-colors flex items-center gap-2"><i className="fas fa-external-link-alt"></i><span>Demo</span></a>
+                  <a href="https://github.com/chensong823/secure-vehicle-management" target="_blank" rel="noopener noreferrer" className="text-base text-gray-400 hover:text-primary transition-colors flex items-center gap-2"><i className="fab fa-github"></i><span>Code</span></a>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const Contact = ({ t }) => (
+  <section id="contact" className="py-36 px-10 bg-gradient-to-b from-dark/40 to-dark parallax-layer">
+    <div className="max-w-4xl mx-auto">
+      <div className="text-center mb-20 reveal"><h2 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight">{t.contact.title}</h2><div className="w-28 h-1.5 bg-gradient-to-r from-primary via-secondary to-aurora3 mx-auto rounded-full"></div></div>
+      <div className="flex flex-col items-center text-center space-y-14 reveal" style={{ transitionDelay: '200ms' }}>
+        <p className="text-gray-400 text-xl max-w-2xl leading-relaxed">{t.contact.subtitle}</p>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5 w-full">
+          <a href="mailto:chensong823@gmail.com" className="flex flex-col items-center gap-4 p-6 glass rounded-2xl card-hover group">
+            <div className="w-16 h-16 rounded-full bg-primary/15 flex items-center justify-center group-hover:glow-cyan transition-all"><i className="fas fa-envelope text-2xl text-primary"></i></div>
+            <div className="text-gray-400 text-sm font-medium">{t.contact.social.email}</div>
+          </a>
+          <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-4 p-6 glass rounded-2xl card-hover group">
+            <div className="w-16 h-16 rounded-full bg-primary/15 flex items-center justify-center group-hover:glow-cyan transition-all"><i className="fab fa-github text-2xl text-primary"></i></div>
+            <div className="text-gray-400 text-sm font-medium">{t.contact.social.github}</div>
+          </a>
+          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-4 p-6 glass rounded-2xl card-hover group">
+            <div className="w-16 h-16 rounded-full bg-primary/15 flex items-center justify-center group-hover:glow-cyan transition-all"><i className="fab fa-linkedin-in text-2xl text-primary"></i></div>
+            <div className="text-gray-400 text-sm font-medium">{t.contact.social.linkedin}</div>
+          </a>
+          <button onClick="openQrModal()" className="flex flex-col items-center gap-4 p-6 glass rounded-2xl card-hover group">
+            <div className="w-16 h-16 rounded-full bg-green-500/15 flex items-center justify-center group-hover:shadow-[0_0_25px_rgba(34,197,94,0.4)] transition-all"><i className="fab fa-weixin text-2xl text-green-500"></i></div>
+            <div className="text-gray-400 text-sm font-medium">{t.contact.social.wechat}</div>
+          </button>
+          <a href="https://xiaohongshu.com" target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-4 p-6 glass rounded-2xl card-hover group">
+            <div className="w-16 h-16 rounded-full bg-red-500/15 flex items-center justify-center group-hover:shadow-[0_0_25px_rgba(229,71,72,0.4)] transition-all"><i className="fas fa-heart text-2xl text-red-500"></i></div>
+            <div className="text-gray-400 text-sm font-medium">{t.contact.social.xiaohongshu}</div>
+          </a>
+          <a href="https://douyin.com" target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-4 p-6 glass rounded-2xl card-hover group">
+            <div className="w-16 h-16 rounded-full bg-pink-500/15 flex items-center justify-center group-hover:shadow-[0_0_25px_rgba(236,72,153,0.4)] transition-all"><i className="fas fa-music text-2xl text-pink-500"></i></div>
+            <div className="text-gray-400 text-sm font-medium">{t.contact.social.douyin}</div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
+const Footer = ({ t }) => (
+  <footer className="py-12 px-10 border-t border-gray-800/30">
+    <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+      <div className="text-gray-500 text-base">© 2024 {t.footer.copyright}</div>
+      <div className="text-gray-500 text-base flex items-center gap-3"><span>{t.footer.madeWith}</span><span className="text-red-500">♥</span><span>Song Chen</span></div>
+      <div className="flex gap-7">
+        <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-primary transition-colors text-lg"><i className="fab fa-github"></i></a>
+        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-primary transition-colors text-lg"><i className="fab fa-linkedin-in"></i></a>
+        <a href="mailto:chensong823@gmail.com" className="text-gray-500 hover:text-primary transition-colors text-lg"><i className="fas fa-envelope"></i></a>
+      </div>
+    </div>
+  </footer>
+);
+
+const App = () => {
+  const { lang } = useI18n();
+  const { translations } = window.__PORTFOLIO_I18N__;
+  const t = translations[lang] || translations['zh-CN'];
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrolled = window.scrollY;
+      document.querySelectorAll('.parallax-layer').forEach((section, i) => {
+        const rate = (i + 1) * 0.04;
+        section.style.transform = `translateY(${scrolled * rate}px)`;
+      });
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => entry.isIntersecting && entry.target.classList.add('visible'));
+    }, { threshold: 0.08, rootMargin: '0px 0px -50px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div className="relative min-h-screen bg-dark">
+      <div className="aurora-bg"></div>
+      <CursorGlow />
+      <Navbar t={t} />
+      <main>
+        <Header t={t} />
+        <About t={t} />
+        <Skills t={t} />
+        <Projects t={t} />
+        <Contact t={t} />
+      </main>
+      <Footer t={t} />
+    </div>
+  );
+};
+
+const Root = () => (<I18nProvider><App /></I18nProvider>);
+ReactDOM.createRoot(document.getElementById('root')).render(<Root />);
+  </script>
+</body>
+</html>
