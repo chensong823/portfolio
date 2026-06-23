@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -sI \"https://cdn.tailwindcss.com\")",
+      "Bash(curl -sI \"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css\")",
+      "Bash(curl -sI \"https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700\")"
+    ]
+  }
+}
